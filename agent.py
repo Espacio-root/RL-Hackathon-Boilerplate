@@ -41,20 +41,17 @@ class Agent:
         ).to(self.device)
 
         # Load weights
-        try:
-            print(f"Loading model from {self.model_path}...")
-            loaded_dict = torch.load(self.model_path, map_location=self.device)
+        print(f"Loading model from {self.model_path}...")
+        loaded_dict = torch.load(self.model_path, map_location=self.device)
+        
+        # Handle different saving formats (rsl_rl saves full state dict)
+        if 'model_state_dict' in loaded_dict:
+            self.policy.load_state_dict(loaded_dict['model_state_dict'])
+        else:
+            self.policy.load_state_dict(loaded_dict)
             
-            # Handle different saving formats (rsl_rl saves full state dict)
-            if 'model_state_dict' in loaded_dict:
-                self.policy.load_state_dict(loaded_dict['model_state_dict'])
-            else:
-                self.policy.load_state_dict(loaded_dict)
-                
-            self.policy.eval()
-            print("Model loaded successfully.")
-        except FileNotFoundError:
-            print(f"Warning: {self.model_path} not found. Agent will use random weights.")
+        self.policy.eval()
+        print("Model loaded successfully.")
 
     def reset(self):
         """
