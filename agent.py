@@ -19,7 +19,7 @@ class Agent:
         Users can modify the path to load their specific submitted model.
         """
         # Path to the model checkpoint (submitted by user)
-        self.model_path = "checkpoints/model_1500.pt"
+        self.model_path = "checkpoints/model_500.pt"
         self.model_path = os.path.join(os.getcwd(), self.model_path)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
